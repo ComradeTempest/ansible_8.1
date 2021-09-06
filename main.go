@@ -36,22 +36,12 @@ func main() {
 
 	ilog.Log(ilog.DBG, "main, application settings: %#v", g_params)
 
+	// Initalize SCdrFile with default values
 	cdrFile := cdrs.NewCdrFile(g_params.SrcCdrPath, g_params.CdrFilePrefix)
+
+	// Get read position from DB
 	cdrFile.CurrentFile, cdrFile.CurrentPosition = RequestGetStartPosition()
 
-	//CdrPump(cdrFile)
-}
-
-// CdrProcessor returns only when it successfully processed previous CDR.
-// If CDR cannot be processed for some reason (e.g. CDR receiver server
-// is down, CdrProcessor will try again unless it succeeds).
-// CdrProcessor returns file name and position to read the next CDR from.
-func CdrProcessor(cdr *cdrs.SCdr) (nextFileName string, nextFilePos int64) {
-
-	// Simulate CDR processing
-	ilog.Log(ilog.DBG, "CdrProcessor, processing CDR %s", cdr.Data)
-	time.Sleep(time.Second)
-	nextFileName = cdr.Filename
-	nextFilePos = cdr.FilePosition + int64(cdr.Length)
-	return
+	// Start CDR pump
+	CdrPump(cdrFile)
 }
