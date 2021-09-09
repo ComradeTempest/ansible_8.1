@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -42,7 +43,7 @@ func DoPostRequestJson(url string, data []byte) (result []byte) {
 
 		requestDuration := time.Since(requestStartTime)
 		ilog.Log(ilog.DBG, "DoPostRequest, response received in %d ms: %s", requestDuration.Milliseconds(),
-			result)
+			strings.TrimSpace(string(result)))
 		return
 	}
 }
@@ -86,7 +87,7 @@ func CdrProcessor(cdr *cdrs.SCdr) (nextFileName string, nextFilePos int64) {
 		Filename:     cdr.Filename,
 		Position:     cdr.FilePosition,
 		RecordLength: cdr.Length,
-		Data:         cdr.Data,
+		Data:         string(cdr.Data),
 	}
 
 	jsonData, err := json.Marshal(requestData)
@@ -107,7 +108,7 @@ func CdrProcessor(cdr *cdrs.SCdr) (nextFileName string, nextFilePos int64) {
 
 		nextFileName = respJson.Filename
 		nextFilePos = respJson.Position
-		ilog.Log(ilog.DBG, "CdrProcessor, CDR %s processed", cdr.Data)
+		ilog.Log(ilog.INF, "CdrProcessor, CDR %s:%d processed", cdr.Filename, cdr.FilePosition)
 		return
 	}
 }

@@ -16,6 +16,9 @@ type SStats struct {
 	// Unix time when last CDR was successfully processed
 	LastCdrProcessedUts int64
 
+	// Total amount of processed CDRs
+	TotalCdrProcessed int64
+
 	// Average CDR reading/processing speed, CDRs/s
 	AverageCdrSpeed float64
 
@@ -45,6 +48,7 @@ func (stat *SStats) SetLastCdrReadTime(tm time.Time, filename string, position i
 func (stat *SStats) SetLastCdrProcessedTime(tm time.Time) {
 	stat.Lock()
 	stat.LastCdrProcessedUts = tm.Unix()
+	stat.TotalCdrProcessed++
 	stat.Unlock()
 }
 
@@ -71,6 +75,7 @@ func (stat *SStats) GetStat() *SStats {
 		LastCdrFileName:          stat.LastCdrFileName,
 		LastCdrFilePosition:      stat.LastCdrFilePosition,
 		LastCdrProcessedUts:      stat.LastCdrProcessedUts,
+		TotalCdrProcessed:        stat.TotalCdrProcessed,
 		AverageCdrSpeed:          stat.AverageCdrSpeed,
 		AverageCdrProcessingTime: stat.AverageCdrProcessingTime,
 	}
@@ -85,6 +90,7 @@ func (stat *SStats) Reset() {
 	stat.LastCdrFileName = ""
 	stat.LastCdrFilePosition = 0
 	stat.LastCdrProcessedUts = 0
+	stat.TotalCdrProcessed = 0
 	stat.AverageCdrSpeed = 0
 	stat.AverageCdrProcessingTime = 0
 	stat.Unlock()

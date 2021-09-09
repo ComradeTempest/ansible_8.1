@@ -57,7 +57,7 @@ func (cdr *SCdr) ReadFromFile() (eof bool, err error) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		ilog.Log(ilog.ERR, "SCdr::Read, cannot open file %s: %s", cdr.Filename, err.Error())
+		ilog.Log(ilog.ERR, "SCdr::ReadFromFile, cannot open file %s: %s", cdr.Filename, err.Error())
 		return
 	}
 
@@ -66,7 +66,7 @@ func (cdr *SCdr) ReadFromFile() (eof bool, err error) {
 
 	_, err = file.Seek(cdr.FilePosition, 0)
 	if err != nil {
-		ilog.Log(ilog.ERR, "SCdr::Read, cannot seek to position %d, file %s: %s", cdr.FilePosition, cdr.Filename,
+		ilog.Log(ilog.ERR, "SCdr::ReadFromFile, cannot seek to position %d, file %s: %s", cdr.FilePosition, cdr.Filename,
 			err.Error())
 		return
 	}
@@ -82,14 +82,14 @@ func (cdr *SCdr) ReadFromFile() (eof bool, err error) {
 			return
 		}
 
-		ilog.Log(ilog.ERR, "SCdr::Read, error reading file %s at position %d: %s", cdr.Filename, cdr.FilePosition,
-			err.Error())
+		ilog.Log(ilog.ERR, "SCdr::ReadFromFile, error reading file %s at position %d: %s", cdr.Filename,
+			cdr.FilePosition, err.Error())
 		return
 	}
 
 	cdr.Length = len(cdr.Data)
-	ilog.Log(ilog.DBG, "SCdr::Read, CDR (%d bytes) was successfuly read from file %s:%d", cdr.Length, cdr.Filename,
-		cdr.FilePosition)
+	ilog.Log(ilog.INF, "SCdr::ReadFromFile, CDR (%d bytes) was successfuly read from file %s:%d",
+		cdr.Length, cdr.Filename, cdr.FilePosition)
 
 	// Remove trailing special symbols
 	for pos := cdr.Length - 1; pos >= 0; pos-- {
@@ -100,7 +100,7 @@ func (cdr *SCdr) ReadFromFile() (eof bool, err error) {
 	}
 
 	if len(cdr.Data) < 2 || cdr.Data[0] != '{' || cdr.Data[len(cdr.Data)-1] != '}' {
-		ilog.Log(ilog.WRN, "SCdr::Read, invalid CDR in file %s:%d", cdr.Filename, cdr.FilePosition)
+		ilog.Log(ilog.WRN, "SCdr::ReadFromFile, invalid CDR in file %s:%d", cdr.Filename, cdr.FilePosition)
 		cdr.Data = cdr.Data[:0]
 		err = ErrInvalidCdr
 		return

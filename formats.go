@@ -14,7 +14,7 @@ type SProcessCdr struct {
 	Filename     string `json:"filename"`
 	Position     int64  `json:"position"`
 	RecordLength int    `json:"recordLength"`
-	Data         []byte `json:"data"`
+	Data         string `json:"data"`
 }
 
 // Get start position and process CDR response JSON structure

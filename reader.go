@@ -124,8 +124,11 @@ func CdrPump(cdrFile *cdrs.SCdrFile) {
 
 			// Since we are the only one goroutine who writes to g_statistics, we can safely
 			// read it here without locking the mutex
-			ilog.Log(ilog.DBG, "CdrPump, statistics: average speed: %f CDRs/s, average processing time: %f ms",
-				g_statistics.AverageCdrSpeed, g_statistics.AverageCdrProcessingTime*1000.0)
+			ilog.Log(ilog.DBG,
+				"CdrPump, statistics: %i CDRs processed, avg. speed %f CDRs/s, avg. processing time %f ms",
+				nCdrs,
+				g_statistics.AverageCdrSpeed,
+				g_statistics.AverageCdrProcessingTime*1000.0)
 
 			lastStatUpdateTime = now
 			nCdrs = 0
