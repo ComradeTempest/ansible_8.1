@@ -46,6 +46,9 @@ type SParams struct {
 
 	// HTTP request retry interval, seconds
 	IntervalHttpRetry int
+
+	// Prometheus HTTP server URL
+	PrometheusHttpUrl string
 }
 
 func readIniString(section *ini.Section, keyName string, value *string) bool {
@@ -84,6 +87,8 @@ func (params *SParams) LoadFromIni(iniFile *ini.File) bool {
 	params.CdrRereadErrorCount = section.Key("ErrorRetryReadCount").RangeInt(5, 1, math.MaxInt32)
 	params.IntervalStatsUpdate = section.Key("StatisticsUpdateInerval").RangeInt(60, 1, 300)
 	params.IntervalHttpRetry = section.Key("HttpRetryInterval").RangeInt(10, 1, 300)
+
+	params.PrometheusHttpUrl = section.Key("PrometheusHttpUrl").MustString(":2112")
 
 	return true
 }

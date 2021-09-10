@@ -92,7 +92,6 @@ func CdrPump(cdrFile *cdrs.SCdrFile) {
 
 	g_cdrReadErrorCount = 0
 	g_lastCdrTime = time.Now()
-	g_statistics.Reset()
 
 	lastStatUpdateTime := time.Now()
 	nCdrs := 0
@@ -104,13 +103,13 @@ func CdrPump(cdrFile *cdrs.SCdrFile) {
 		cdr := CdrRead(cdrFile)
 		if cdr != nil {
 			cdrReadTime := time.Now()
-			g_statistics.SetLastCdrReadTime(cdrReadTime, cdrFile.CurrentFile, cdrFile.CurrentPosition)
+			g_statistics.OnCdrRead(cdrReadTime, cdrFile.CurrentFile, cdrFile.CurrentPosition)
 
 			// Process CDR and update current file name and position
 			cdrFile.SetNewFilePosition(CdrProcessor(cdr))
 
 			cdrProcessedTime := time.Now()
-			g_statistics.SetLastCdrProcessedTime(cdrProcessedTime)
+			g_statistics.OnCdrProcessed(cdrProcessedTime, cdr.Length)
 
 			totalProcessingTime += cdrProcessedTime.Sub(cdrReadTime)
 			nCdrs++
@@ -120,15 +119,19 @@ func CdrPump(cdrFile *cdrs.SCdrFile) {
 		now := time.Now()
 		statInterval := now.Sub(lastStatUpdateTime)
 		if statInterval >= time.Second*time.Duration(g_params.IntervalStatsUpdate) {
-			g_statistics.UpdateAverages(statInterval, totalProcessingTime, nCdrs)
 
-			// Since we are the only one goroutine who writes to g_statistics, we can safely
-			// read it here without locking the mutex
+			// Count local statistics
+			var avgProcessingTime float64
+			avgSpeed := float64(nCdrs) / statInterval.Seconds()
+			if nCdrs > 0 {
+				avgProcessingTime = totalProcessingTime.Seconds() / float64(nCdrs)
+			}
+
+			g_statistics.OnAvgValues(avgProcessingTime, avgSpeed)
+
 			ilog.Log(ilog.DBG,
-				"CdrPump, statistics: %i CDRs processed, avg. speed %f CDRs/s, avg. processing time %f ms",
-				nCdrs,
-				g_statistics.AverageCdrSpeed,
-				g_statistics.AverageCdrProcessingTime*1000.0)
+				"CdrPump, statistics: %d CDRs processed, avg. speed %f CDRs/s, avg. processing time %f ms",
+				nCdrs, avgSpeed, avgProcessingTime*1000.0)
 
 			lastStatUpdateTime = now
 			nCdrs = 0

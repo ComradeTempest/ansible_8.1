@@ -2,7 +2,7 @@ package main
 
 const (
 	APP_NAME      = "CdrSender"
-	APP_VERSION   = "1.0.0.2"
+	APP_VERSION   = "1.0.0.3"
 	INI_FILE_NAME = "CdrSender.ini"
 
 	URI_PATH_GETSTARTPOS = "/GetStartPosition"

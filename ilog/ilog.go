@@ -287,7 +287,7 @@ func (l *sLogger) OpenLogFile(logTime time.Time) error {
 		newLogDateStr + "_000000.log")
 
 	// Write new file name to the current log file
-	l.m_logFile.WriteString("----------------------> " + newLogFileName)
+	l.m_logFile.WriteString("----------------------> " + newLogFileName + "\n")
 
 	// Close current log file
 	l.CloseLogFile()
@@ -299,7 +299,7 @@ func (l *sLogger) OpenLogFile(logTime time.Time) error {
 	}
 
 	// Write previous log file name to the new log file
-	l.m_logFile.WriteString("<---------------------- " + l.m_currentLogFileName)
+	l.m_logFile.WriteString("<---------------------- " + l.m_currentLogFileName + "\n")
 
 	l.m_currentLogDateStr = newLogDateStr
 	l.m_currentLogFileName = newLogFileName

@@ -16,6 +16,7 @@ func DoPostRequestJson(url string, data []byte) (result []byte) {
 	for nAttempt := 0; ; nAttempt++ {
 
 		if nAttempt != 0 {
+			g_statistics.OnCdrProcessingError()
 			time.Sleep(time.Second * time.Duration(g_params.IntervalHttpRetry))
 		}
 

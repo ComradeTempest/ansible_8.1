@@ -35,6 +35,7 @@ func main() {
 	}
 
 	ilog.Log(ilog.DBG, "main, application settings: %#v", g_params)
+	g_statistics.Init()
 
 	// Initalize SCdrFile with default values
 	cdrFile := cdrs.NewCdrFile(g_params.SrcCdrPath, g_params.CdrFilePrefix)
