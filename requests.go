@@ -1,8 +1,8 @@
 package main
 
 import (
-	"CdrSender/cdrs"
-	"CdrSender/ilog"
+	"cdrsender/cdrs"
+	"cdrsender/ilog"
 	"bytes"
 	"encoding/json"
 	"io"

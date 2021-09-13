@@ -1,8 +1,8 @@
 package cdrs
 
 import (
-	"CdrSender/ilog"
 	"bufio"
+	"cdrsender/ilog"
 	"errors"
 	"io"
 	"os"

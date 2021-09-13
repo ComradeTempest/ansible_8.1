@@ -1,7 +1,7 @@
 package main
 
 import (
-	"CdrSender/ilog"
+	"cdrsender/ilog"
 	"math"
 	"os"
 
@@ -48,7 +48,7 @@ type SParams struct {
 	IntervalHttpRetry int
 
 	// Prometheus HTTP server URL
-	PrometheusHttpUrl string
+	PrometheusHttpListenAddress string
 }
 
 func readIniString(section *ini.Section, keyName string, value *string) bool {
@@ -89,7 +89,7 @@ func (params *SParams) LoadFromIni(iniFile *ini.File) bool {
 	params.IntervalHttpRetry = section.Key("HttpRetryInterval").RangeInt(10, 1, 300)
 
 	sectionStats := iniFile.Section("STATS")
-	params.PrometheusHttpUrl = sectionStats.Key("PrometheusHttpUrl").MustString(":2112")
+	params.PrometheusHttpListenAddress = sectionStats.Key("PrometheusHttpAddress").MustString(":2112")
 
 	return true
 }

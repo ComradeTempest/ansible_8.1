@@ -1,7 +1,7 @@
 package cdrs
 
 import (
-	"CdrSender/ilog"
+	"cdrsender/ilog"
 	"path/filepath"
 	"sort"
 	"time"

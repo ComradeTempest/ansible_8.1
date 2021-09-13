@@ -1,7 +1,7 @@
 package main
 
 import (
-	"CdrSender/ilog"
+	"cdrsender/ilog"
 	"net/http"
 	"time"
 
@@ -101,9 +101,9 @@ func (stat *SStats) Init() {
 
 	// Start Prometheus HTTP server
 	go func() {
-		err := http.ListenAndServe(g_params.PrometheusHttpUrl, nil)
+		err := http.ListenAndServe(g_params.PrometheusHttpListenAddress, nil)
 		if err != nil {
-			ilog.Log(ilog.ERR, "SStats::Init::func, cannot start HTTP server: %s", err.Error())
+			ilog.Log(ilog.ERR, "SStats::Init::func, cannot start Prometheus HTTP server: %s", err.Error())
 		}
 	}()
 }
