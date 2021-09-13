@@ -88,7 +88,8 @@ func (params *SParams) LoadFromIni(iniFile *ini.File) bool {
 	params.IntervalStatsUpdate = section.Key("StatisticsUpdateInerval").RangeInt(60, 1, 300)
 	params.IntervalHttpRetry = section.Key("HttpRetryInterval").RangeInt(10, 1, 300)
 
-	params.PrometheusHttpUrl = section.Key("PrometheusHttpUrl").MustString(":2112")
+	sectionStats := iniFile.Section("STATS")
+	params.PrometheusHttpUrl = sectionStats.Key("PrometheusHttpUrl").MustString(":2112")
 
 	return true
 }

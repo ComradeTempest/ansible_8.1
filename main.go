@@ -21,8 +21,8 @@ var (
 
 func main() {
 
-	iniFile, error := ini.Load(INI_FILE_NAME)
-	if error != nil {
+	iniFile, err := ini.Load(INI_FILE_NAME)
+	if err != nil {
 		return
 	}
 
