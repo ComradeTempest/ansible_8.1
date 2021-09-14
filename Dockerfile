@@ -8,7 +8,7 @@ RUN go build .
 # Run
 FROM alpine
 
-COPY --from=builder go/src/tas_cdrsender/cdrsender /cdrsender
-COPY --from=builder go/src/tas_cdrsender/cdrsender.ini /cdrsender.ini
+COPY --from=builder /go/src/tas_cdrsender/cdrsender /cdrsender
+COPY --from=builder /go/src/tas_cdrsender/cdrsender.ini /cdrsender.ini
 CMD ["/cdrsender"]
 EXPOSE 2120
